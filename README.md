@@ -50,6 +50,8 @@ CUDA_VISIBLE_DEVICES=0 WANDB_DISABLED=true uv run train Mjlab-Tracking-Flat-Unit
 
 ### 2. 可视化播放
 
+#### 方法 A：使用标准 Tracking 任务（推荐）
+
 使用零策略（zero agent）可视化动作文件：
 
 ```bash
@@ -61,6 +63,23 @@ MUJOCO_GL=egl uv run play Mjlab-Tracking-Flat-Unitree-G1 \
   --no-terminations True \
   --viewer native
 ```
+
+#### 方法 B：使用 Spinkick 任务（在 g1_spinkick_example 目录下）
+
+如果你想使用 `Mjlab-Spinkick-Unitree-G1` 任务，需要在 `g1_spinkick_example` 目录下运行：
+
+```bash
+cd /home/wasabi/Kevin/g1_spinkick_example
+conda activate mjlab  # 激活 mjlab conda 环境
+MUJOCO_GL=egl uv run play Mjlab-Spinkick-Unitree-G1 \
+  --agent zero \
+  --motion-file /home/wasabi/Kevin/g1_npz/g1_kick_combo.npz \
+  --num-envs 1 \
+  --no-terminations True \
+  --viewer native
+```
+
+**注意**：`Mjlab-Spinkick-Unitree-G1` 是自定义任务，需要在 `g1_spinkick_example` 目录下运行才能使用。
 
 ### 3. Sim2Sim 回放
 
