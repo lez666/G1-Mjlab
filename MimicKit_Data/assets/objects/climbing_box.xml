@@ -1,0 +1,8 @@
+<mujoco model="climbing_box">
+	<worldbody>
+		<body name="box" pos="0 0 0">
+		<freejoint name="root"/>
+			<geom name="box" type="box" size="0.4 0.6 1.0"/>
+		</body>
+	</worldbody>
+</mujoco>

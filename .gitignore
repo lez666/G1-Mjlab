@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 训练过程数据（排除中间检查点，保留关键检查点）
+# 注意：mjlab/.gitignore 已经排除了 logs/，我们需要在根目录覆盖这个规则
+# 排除所有 model_*.pt，但保留指定的关键检查点
+mjlab/logs/rsl_rl/**/model_*.pt
+!mjlab/logs/rsl_rl/g1_tracking/2026-02-04_00-28-16/model_0.pt
+!mjlab/logs/rsl_rl/g1_tracking/2026-02-04_00-28-16/model_4500.pt
+# 保留 ONNX 模型和配置文件
+!mjlab/logs/rsl_rl/**/model_*.onnx
+!mjlab/logs/rsl_rl/**/params/
+
+# TensorBoard 事件文件
+mjlab/logs/rsl_rl/**/events.out.tfevents.*
+
+# WandB
+wandb/
+**/wandb/
+
+# 临时文件
+*.tmp
+*.log
+*.bak
+MUJOCO_LOG.TXT
+
+# 视频和渲染输出
+videos/
+*.mp4
+*.gif
+
+# 其他
+*.ipynb_checkpoints/
+.DS_Store
+*.pkl.bak
