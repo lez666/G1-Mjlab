@@ -56,11 +56,12 @@ CUDA_VISIBLE_DEVICES=0 WANDB_DISABLED=true uv run train Mjlab-Tracking-Flat-Unit
 
 ```bash
 cd /home/wasabi/Kevin/mjlab
-MUJOCO_GL=egl uv run play Mjlab-Tracking-Flat-Unitree-G1 \
+CUDA_VISIBLE_DEVICES=0 MUJOCO_GL=egl uv run play Mjlab-Tracking-Flat-Unitree-G1 \
   --agent zero \
   --motion-file /home/wasabi/Kevin/g1_npz/g1_kick_combo.npz \
   --num-envs 1 \
   --no-terminations True \
+  --device cuda:0 \
   --viewer native
 ```
 
@@ -71,11 +72,12 @@ MUJOCO_GL=egl uv run play Mjlab-Tracking-Flat-Unitree-G1 \
 ```bash
 cd /home/wasabi/Kevin/g1_spinkick_example
 conda activate mjlab  # 激活 mjlab conda 环境
-MUJOCO_GL=egl uv run play Mjlab-Spinkick-Unitree-G1 \
+CUDA_VISIBLE_DEVICES=0 MUJOCO_GL=egl uv run play Mjlab-Spinkick-Unitree-G1 \
   --agent zero \
   --motion-file /home/wasabi/Kevin/g1_npz/g1_kick_combo.npz \
   --num-envs 1 \
   --no-terminations True \
+  --device cuda:0 \
   --viewer native
 ```
 
@@ -87,11 +89,12 @@ MUJOCO_GL=egl uv run play Mjlab-Spinkick-Unitree-G1 \
 
 ```bash
 cd /home/wasabi/Kevin/mjlab
-MUJOCO_GL=egl uv run play Mjlab-Tracking-Flat-Unitree-G1 \
+CUDA_VISIBLE_DEVICES=0 MUJOCO_GL=egl uv run play Mjlab-Tracking-Flat-Unitree-G1 \
   --checkpoint-file /home/wasabi/Kevin/mjlab/logs/rsl_rl/g1_tracking/2026-02-04_00-28-16/model_4500.pt \
   --motion-file /home/wasabi/Kevin/g1_npz/g1_cartwheel.npz \
   --num-envs 1 \
   --no-terminations True \
+  --device cuda:0 \
   --viewer native
 ```
 
@@ -121,11 +124,12 @@ uv run pkl_to_csv.py \
 
 ```bash
 cd /home/wasabi/Kevin/mjlab
-MUJOCO_GL=egl uv run src/mjlab/scripts/csv_to_npz.py \
+CUDA_VISIBLE_DEVICES=0 MUJOCO_GL=egl uv run src/mjlab/scripts/csv_to_npz.py \
   --input-file /home/wasabi/Kevin/g1_csv/g1_cartwheel.csv \
   --output-name g1_cartwheel \
   --input-fps 30 \
   --output-fps 50 \
+  --device cuda:0 \
   --render  # 可选：生成预览视频
 ```
 
@@ -134,6 +138,7 @@ MUJOCO_GL=egl uv run src/mjlab/scripts/csv_to_npz.py \
 - `--output-name` - 输出名称（会保存到 WandB registry，或使用 `/tmp/motion.npz`）
 - `--input-fps` - 输入 CSV 的帧率（默认 30）
 - `--output-fps` - 输出 NPZ 的帧率（默认 50）
+- `--device` - 计算设备（默认 `cuda:0`，使用 GPU）
 - `--render` - 是否渲染并生成预览视频
 - `--line-range` - 处理 CSV 文件的行范围（可选）
 
@@ -153,10 +158,14 @@ MUJOCO_GL=egl uv run src/mjlab/scripts/csv_to_npz.py \
 
 ## 注意事项
 
-1. **GPU 要求**：训练需要 NVIDIA GPU 支持
-2. **环境变量**：使用 `MUJOCO_GL=egl` 进行无头渲染
-3. **日志位置**：训练日志和模型保存在 `mjlab/logs/rsl_rl/` 目录下
-4. **TensorBoard**：训练过程可通过 TensorBoard 查看（如果启用）
+1. **GPU 要求**：所有操作（训练、可视化、数据转换）都需要 NVIDIA GPU 支持以获得最佳性能
+2. **GPU 使用**：
+   - 训练：通过 `CUDA_VISIBLE_DEVICES=0` 指定 GPU
+   - 可视化/回放：通过 `CUDA_VISIBLE_DEVICES=0` 和 `--device cuda:0` 确保使用 GPU
+   - 数据转换：通过 `CUDA_VISIBLE_DEVICES=0` 和 `--device cuda:0` 确保使用 GPU
+3. **环境变量**：使用 `MUJOCO_GL=egl` 进行无头渲染
+4. **日志位置**：训练日志和模型保存在 `mjlab/logs/rsl_rl/` 目录下
+5. **TensorBoard**：训练过程可通过 TensorBoard 查看（如果启用）
 
 ## 快速参考
 
