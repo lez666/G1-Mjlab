@@ -58,7 +58,7 @@ MUJOCO_GL=egl uv run play Mjlab-Spinkick-Unitree-G1 \
   --agent zero \
   --motion-file /home/wasabi/Kevin/g1_npz/g1_kick_combo.npz \
   --num-envs 1 \
-  --no-terminations \
+  --no-terminations True \
   --viewer native
 ```
 
@@ -72,7 +72,7 @@ MUJOCO_GL=egl uv run play Mjlab-Tracking-Flat-Unitree-G1 \
   --checkpoint-file /home/wasabi/Kevin/mjlab/logs/rsl_rl/g1_tracking/2026-02-04_00-28-16/model_4500.pt \
   --motion-file /home/wasabi/Kevin/g1_npz/g1_cartwheel.npz \
   --num-envs 1 \
-  --no-terminations \
+  --no-terminations True \
   --viewer native
 ```
 
