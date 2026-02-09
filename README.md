@@ -54,7 +54,7 @@ CUDA_VISIBLE_DEVICES=0 WANDB_DISABLED=true uv run train Mjlab-Tracking-Flat-Unit
 
 ```bash
 cd /home/wasabi/Kevin/mjlab
-MUJOCO_GL=egl uv run play Mjlab-Spinkick-Unitree-G1 \
+MUJOCO_GL=egl uv run play Mjlab-Tracking-Flat-Unitree-G1 \
   --agent zero \
   --motion-file /home/wasabi/Kevin/g1_npz/g1_kick_combo.npz \
   --num-envs 1 \
