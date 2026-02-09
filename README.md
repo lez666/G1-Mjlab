@@ -36,6 +36,10 @@ pip install mjlab
 
 ## 常用操作命令
 
+**重要提示**：
+- 所有命令需在激活 `mjlab` conda 环境后运行
+- **所有仿真命令默认使用 GPU**（包含 `CUDA_VISIBLE_DEVICES=0` 和 `--device cuda:0`）
+
 ### 1. 训练模型
 
 训练 G1 机器人进行动作跟踪（使用 cartwheel 动作）：
@@ -71,7 +75,6 @@ CUDA_VISIBLE_DEVICES=0 MUJOCO_GL=egl uv run play Mjlab-Tracking-Flat-Unitree-G1 
 
 ```bash
 cd /home/wasabi/Kevin/g1_spinkick_example
-conda activate mjlab  # 激活 mjlab conda 环境
 CUDA_VISIBLE_DEVICES=0 MUJOCO_GL=egl uv run play Mjlab-Spinkick-Unitree-G1 \
   --agent zero \
   --motion-file /home/wasabi/Kevin/g1_npz/g1_kick_combo.npz \
@@ -81,7 +84,10 @@ CUDA_VISIBLE_DEVICES=0 MUJOCO_GL=egl uv run play Mjlab-Spinkick-Unitree-G1 \
   --viewer native
 ```
 
-**注意**：`Mjlab-Spinkick-Unitree-G1` 是自定义任务，需要在 `g1_spinkick_example` 目录下运行才能使用。
+**注意**：
+- `Mjlab-Spinkick-Unitree-G1` 是自定义任务，需要在 `g1_spinkick_example` 目录下运行
+- 运行时会显示 `Environment device: cuda:0` 确认 GPU 使用
+- 常见警告（`libEGL warning`、`GLFWError`）可忽略，不影响 GPU 执行
 
 ### 3. Sim2Sim 回放
 
@@ -97,6 +103,8 @@ CUDA_VISIBLE_DEVICES=0 MUJOCO_GL=egl uv run play Mjlab-Tracking-Flat-Unitree-G1 
   --device cuda:0 \
   --viewer native
 ```
+
+**注意**：如遇 CUDA 错误，可使用 CPU 模式（见"注意事项"部分）
 
 ## 数据集转换
 
@@ -133,16 +141,7 @@ CUDA_VISIBLE_DEVICES=0 MUJOCO_GL=egl uv run src/mjlab/scripts/csv_to_npz.py \
   --render  # 可选：生成预览视频
 ```
 
-参数说明：
-- `--input-file` - 输入的 CSV 文件路径
-- `--output-name` - 输出名称（会保存到 WandB registry，或使用 `/tmp/motion.npz`）
-- `--input-fps` - 输入 CSV 的帧率（默认 30）
-- `--output-fps` - 输出 NPZ 的帧率（默认 50）
-- `--device` - 计算设备（默认 `cuda:0`，使用 GPU）
-- `--render` - 是否渲染并生成预览视频
-- `--line-range` - 处理 CSV 文件的行范围（可选）
-
-**注意**：`csv_to_npz.py` 会将转换后的文件上传到 WandB registry。如果需要本地保存，可以修改脚本或从 `/tmp/motion.npz` 复制。
+**注意**：转换后的文件会上传至 WandB registry，或保存在 `/tmp/motion.npz`
 
 ## 可用动作文件
 
@@ -158,15 +157,11 @@ CUDA_VISIBLE_DEVICES=0 MUJOCO_GL=egl uv run src/mjlab/scripts/csv_to_npz.py \
 
 ## 注意事项
 
-1. **GPU 要求**：所有操作（训练、可视化、数据转换）都需要 NVIDIA GPU 支持以获得最佳性能
-2. **GPU 使用**：
-   - 训练：通过 `CUDA_VISIBLE_DEVICES=0` 指定 GPU
-   - 可视化/回放：通过 `CUDA_VISIBLE_DEVICES=0` 和 `--device cuda:0` 确保使用 GPU
-   - 数据转换：通过 `CUDA_VISIBLE_DEVICES=0` 和 `--device cuda:0` 确保使用 GPU
-3. **CPU 模式（GPU 不可用时）**：
-   - 如果遇到 CUDA 错误（如错误 804：硬件不兼容），可以使用 CPU 模式：
+1. **GPU 使用**：所有命令默认使用 GPU（包含 `CUDA_VISIBLE_DEVICES=0` 和 `--device cuda:0`）
+2. **CPU 模式（GPU 不可用时）**：如遇 CUDA 错误 804，移除 `CUDA_VISIBLE_DEVICES=0` 并将 `--device cuda:0` 改为 `--device cpu`
    ```bash
-   # 移除 CUDA_VISIBLE_DEVICES，使用 --device cpu
+   # 示例：CPU 模式
+   cd /home/wasabi/Kevin/mjlab
    MUJOCO_GL=egl uv run play Mjlab-Tracking-Flat-Unitree-G1 \
      --agent zero \
      --motion-file /home/wasabi/Kevin/g1_npz/g1_kick_combo.npz \
@@ -175,10 +170,8 @@ CUDA_VISIBLE_DEVICES=0 MUJOCO_GL=egl uv run src/mjlab/scripts/csv_to_npz.py \
      --device cpu \
      --viewer native
    ```
-   - CPU 模式速度较慢，但可以正常工作
-4. **环境变量**：使用 `MUJOCO_GL=egl` 进行无头渲染
-5. **日志位置**：训练日志和模型保存在 `mjlab/logs/rsl_rl/` 目录下
-6. **TensorBoard**：训练过程可通过 TensorBoard 查看（如果启用）
+3. **环境变量**：`MUJOCO_GL=egl` 用于无头渲染
+4. **日志位置**：训练日志保存在 `mjlab/logs/rsl_rl/` 目录
 
 ## 快速参考
 
